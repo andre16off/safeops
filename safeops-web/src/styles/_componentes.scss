@@ -1,0 +1,379 @@
+@use 'tokens' as *;
+
+// ---------- Botones ----------
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $espacio-2;
+  min-height: 2.75rem;
+  padding: $espacio-2 $espacio-4;
+  border: 2px solid var(--tinta);
+  border-radius: 3px;
+  background: var(--panel);
+  color: var(--tinta);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--concreto);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
+.boton--primario {
+  background: var(--amarillo);
+  border-color: var(--sobre-amarillo);
+  color: var(--sobre-amarillo);
+
+  &:hover {
+    background: #ffd429;
+  }
+}
+
+.boton--peligro {
+  border-color: var(--alto);
+  color: var(--alto);
+
+  &:hover {
+    background: var(--alto);
+    color: var(--sobre-alto);
+  }
+}
+
+.boton--claro {
+  border-color: var(--sobre-cabecera);
+  background: transparent;
+  color: var(--sobre-cabecera);
+  min-height: 2.25rem;
+
+  &:hover {
+    background: var(--sobre-cabecera);
+    color: var(--cabecera);
+  }
+}
+
+.boton--chico {
+  min-height: 2.25rem;
+  padding: $espacio-1 $espacio-3;
+  font-size: 0.9375rem;
+}
+
+.enlace {
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+// ---------- Encabezado de página ----------
+.pagina__encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: $espacio-3 $espacio-5;
+  margin-bottom: $espacio-5;
+}
+
+.pagina__descripcion {
+  color: var(--acero);
+  margin-top: $espacio-1;
+  max-width: 60ch;
+}
+
+.pagina__volver {
+  display: inline-block;
+  margin-bottom: $espacio-3;
+  color: var(--acero);
+  font-weight: 500;
+  text-underline-offset: 3px;
+}
+
+// ---------- Paneles ----------
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  padding: $espacio-5;
+}
+
+// ---------- Avisos ----------
+.aviso {
+  border-left: 6px solid var(--acero);
+  background: var(--panel);
+  padding: $espacio-3 $espacio-4;
+  margin-bottom: $espacio-4;
+  border-radius: 0 3px 3px 0;
+}
+
+.aviso--error {
+  border-left-color: var(--alto);
+  background: var(--aviso-error);
+}
+
+.aviso--exito {
+  border-left-color: var(--bajo);
+  background: var(--aviso-exito);
+}
+
+.aviso--info {
+  border-left-color: var(--amarillo);
+  background: var(--aviso-info);
+}
+
+.vacio {
+  @extend .panel;
+  text-align: left;
+  color: var(--acero);
+
+  strong {
+    display: block;
+    color: var(--tinta);
+    font-family: var(--fuente-titulos);
+    font-size: 1.375rem;
+    margin-bottom: $espacio-1;
+  }
+
+  .boton {
+    margin-top: $espacio-4;
+  }
+}
+
+// ---------- Formularios ----------
+.formulario {
+  display: grid;
+  gap: $espacio-4;
+}
+
+.campo {
+  display: grid;
+  gap: $espacio-1;
+
+  label,
+  .campo__etiqueta {
+    font-weight: 600;
+  }
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: $espacio-2 $espacio-3;
+    border: 2px solid var(--acero);
+    border-radius: 3px;
+    background: var(--campo);
+    color: var(--tinta);
+    font: inherit;
+
+    &[aria-invalid='true'] {
+      border-color: var(--alto);
+    }
+  }
+
+  textarea {
+    min-height: 6rem;
+    resize: vertical;
+  }
+}
+
+.campo__ayuda {
+  color: var(--acero);
+  font-size: 0.9375rem;
+}
+
+.campo__error {
+  color: var(--alto);
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.formulario__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $espacio-3;
+  margin-top: $espacio-2;
+}
+
+// ---------- Insignia de nivel ----------
+.insignia {
+  display: inline-block;
+  min-width: 4.25rem;
+  padding: 0.125rem $espacio-3;
+  border-radius: 3px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  text-align: center;
+}
+
+.insignia--bajo {
+  background: var(--bajo);
+  color: var(--sobre-bajo);
+}
+
+.insignia--medio {
+  background: var(--medio);
+  color: var(--sobre-medio);
+}
+
+.insignia--alto {
+  background: var(--alto);
+  color: var(--sobre-alto);
+}
+
+// ---------- Confirmación de eliminación ----------
+.confirmacion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $espacio-2;
+  font-weight: 500;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $espacio-2;
+}
+
+// ---------- Tablas ----------
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+
+  th,
+  td {
+    padding: $espacio-3 $espacio-4;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  th {
+    background: var(--cabecera);
+    color: var(--sobre-cabecera);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  tbody td {
+    border-top: 1px solid var(--borde);
+  }
+
+  td:first-child {
+    overflow-wrap: anywhere;
+  }
+
+  th.tabla__numero,
+  td.tabla__numero {
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+// Encabezado que ordena la tabla al hacer clic.
+.tabla__orden {
+  display: inline-flex;
+  align-items: center;
+  gap: $espacio-1;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  span {
+    width: 0.75rem;
+    color: var(--amarillo);
+  }
+}
+
+// En pantallas angostas cada fila se muestra como una tarjeta.
+@include hasta-movil {
+  .tabla {
+    border: 0;
+    background: transparent;
+
+    thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+
+    tbody,
+    tr,
+    td {
+      display: block;
+    }
+
+    tr {
+      background: var(--panel);
+      border: 1px solid var(--borde);
+      border-top: 5px solid var(--tinta);
+      border-radius: 4px;
+      padding: $espacio-3 $espacio-4;
+      margin-bottom: $espacio-3;
+    }
+
+    tbody td,
+    tbody td.tabla__numero {
+      border: 0;
+      padding: $espacio-1 0;
+      display: grid;
+      grid-template-columns: 7.5rem 1fr;
+      gap: $espacio-3;
+      align-items: center;
+      text-align: left;
+    }
+
+    td::before {
+      content: attr(data-etiqueta);
+      color: var(--acero);
+      font-size: 0.9375rem;
+    }
+
+    tbody td[data-etiqueta='Acciones'] {
+      grid-template-columns: 1fr;
+      padding-top: $espacio-3;
+
+      &::before {
+        display: none;
+      }
+    }
+  }
+}
+
+// ---------- Etiqueta de rol ----------
+.rol {
+  display: inline-block;
+  padding: 0.125rem $espacio-3;
+  border: 1px solid var(--acero);
+  border-radius: 3px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.solo-movil {
+  display: none;
+}
+
+@include hasta-movil {
+  .solo-movil {
+    display: grid;
+  }
+}

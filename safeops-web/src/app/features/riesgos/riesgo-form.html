@@ -1,0 +1,121 @@
+<a class="pagina__volver" [routerLink]="rutaCancelar()">
+  {{ esEdicion() ? 'Volver al riesgo' : 'Volver a los riesgos del área' }}
+</a>
+
+<header class="pagina__encabezado">
+  <div>
+    <h1>{{ esEdicion() ? 'Editar riesgo' : 'Registrar riesgo' }}</h1>
+    @if (area(); as a) {
+      <p class="pagina__descripcion">Área: {{ a.nombre }} ({{ a.ubicacion }})</p>
+    }
+  </div>
+</header>
+
+@if (error()) {
+  <p class="aviso aviso--error" role="alert">{{ error() }}</p>
+}
+
+@if (cargando()) {
+  <p role="status">Cargando…</p>
+} @else {
+  <form class="riesgo-form panel" [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+    <div class="formulario">
+      <div class="campo">
+        <label for="peligro">Peligro</label>
+        <input
+          id="peligro"
+          type="text"
+          formControlName="peligro"
+          maxlength="120"
+          [attr.aria-invalid]="!!errorDe('peligro', 'El peligro')"
+          aria-describedby="ayuda-peligro error-peligro"
+        />
+        <p class="campo__ayuda" id="ayuda-peligro">Qué puede causar daño. Por ejemplo: Piso mojado.</p>
+        @if (errorDe('peligro', 'El peligro'); as mensaje) {
+          <p class="campo__error" id="error-peligro">{{ mensaje }}</p>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="descripcion">Descripción</label>
+        <textarea
+          id="descripcion"
+          formControlName="descripcion"
+          maxlength="255"
+          [attr.aria-invalid]="!!errorDe('descripcion', 'La descripción')"
+          aria-describedby="ayuda-descripcion error-descripcion"
+        ></textarea>
+        <p class="campo__ayuda" id="ayuda-descripcion">
+          Qué podría pasar y a quién afecta. {{ caracteres() }} de 255 caracteres.
+        </p>
+        @if (errorDe('descripcion', 'La descripción'); as mensaje) {
+          <p class="campo__error" id="error-descripcion">{{ mensaje }}</p>
+        }
+      </div>
+
+      <div class="riesgo-form__escala">
+        <div class="campo">
+          <label for="probabilidad">Probabilidad</label>
+          <select
+            id="probabilidad"
+            formControlName="probabilidad"
+            [attr.aria-invalid]="!!errorDe('probabilidad', 'La probabilidad')"
+            aria-describedby="error-probabilidad"
+          >
+            <option [ngValue]="null" disabled>Elige de 1 a 5</option>
+            @for (e of escala; track e.valor) {
+              <option [ngValue]="e.valor">{{ e.probabilidad }}</option>
+            }
+          </select>
+          @if (errorDe('probabilidad', 'La probabilidad'); as mensaje) {
+            <p class="campo__error" id="error-probabilidad">{{ mensaje }}</p>
+          }
+        </div>
+
+        <div class="campo">
+          <label for="impacto">Impacto</label>
+          <select
+            id="impacto"
+            formControlName="impacto"
+            [attr.aria-invalid]="!!errorDe('impacto', 'El impacto')"
+            aria-describedby="error-impacto"
+          >
+            <option [ngValue]="null" disabled>Elige de 1 a 5</option>
+            @for (e of escala; track e.valor) {
+              <option [ngValue]="e.valor">{{ e.impacto }}</option>
+            }
+          </select>
+          @if (errorDe('impacto', 'El impacto'); as mensaje) {
+            <p class="campo__error" id="error-impacto">{{ mensaje }}</p>
+          }
+        </div>
+      </div>
+
+      <div class="formulario__acciones">
+        <button type="submit" class="boton boton--primario" [disabled]="enviando() || formulario.disabled">
+          {{ enviando() ? 'Guardando…' : esEdicion() ? 'Guardar cambios' : 'Registrar riesgo' }}
+        </button>
+        <a class="boton" [routerLink]="rutaCancelar()">Cancelar</a>
+      </div>
+    </div>
+
+    <aside class="riesgo-form__matriz" aria-label="Matriz de riesgo">
+      <p class="campo__etiqueta">Ubicación en la matriz</p>
+      <p class="campo__ayuda">También puedes elegir la probabilidad y el impacto con un clic en una celda.</p>
+      <app-matriz-riesgo
+        [probabilidad]="probabilidad()"
+        [impacto]="impacto()"
+        [editable]="!formulario.disabled"
+        (elegir)="elegirCelda($event)"
+      />
+      <p class="riesgo-form__resultado" role="status">
+        @if (resultado(); as r) {
+          {{ probabilidad() }} × {{ impacto() }} = {{ r.producto }}
+          <app-nivel-insignia [nivel]="r.nivel" />
+        } @else {
+          Elige probabilidad e impacto para ver el nivel.
+        }
+      </p>
+    </aside>
+  </form>
+}

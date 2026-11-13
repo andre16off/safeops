@@ -1,0 +1,60 @@
+<header class="pagina__encabezado">
+  <div>
+    <h1>Áreas de trabajo</h1>
+    <p class="pagina__descripcion">Cada área agrupa los riesgos operacionales identificados en ella.</p>
+  </div>
+  @if (auth.puedeEscribir()) {
+    <a class="boton boton--primario" routerLink="/areas/nueva">Registrar área</a>
+  }
+</header>
+
+@if (error()) {
+  <p class="aviso aviso--error" role="alert">{{ error() }}</p>
+}
+
+@if (cargando()) {
+  <p role="status">Cargando áreas…</p>
+} @else if (areas().length === 0 && !error()) {
+  <div class="vacio">
+    <strong>Todavía no hay áreas registradas</strong>
+    @if (auth.puedeEscribir()) {
+      Registra la primera para empezar a asociarle riesgos.
+      <div><a class="boton boton--primario" routerLink="/areas/nueva">Registrar área</a></div>
+    } @else {
+      Cuando se registren áreas, aparecerán aquí.
+    }
+  </div>
+} @else {
+  <ul class="areas">
+    @for (area of areas(); track area.id) {
+      <li class="area">
+        <h2>{{ area.nombre }}</h2>
+        <p class="area__ubicacion">{{ area.ubicacion }}</p>
+
+        @if (porEliminar() === area.id) {
+          <div class="confirmacion" role="group" [attr.aria-label]="'Confirmar eliminación de ' + area.nombre">
+            <span>¿Eliminar esta área?</span>
+            <button type="button" class="boton boton--chico boton--peligro" [disabled]="eliminando()" (click)="eliminar(area)">
+              {{ eliminando() ? 'Eliminando…' : 'Eliminar' }}
+            </button>
+            <button type="button" class="boton boton--chico" [disabled]="eliminando()" (click)="porEliminar.set(null)">
+              Cancelar
+            </button>
+          </div>
+        } @else {
+          <div class="acciones">
+            <a class="boton boton--chico" [routerLink]="['/areas', area.id, 'riesgos']">Ver riesgos</a>
+            @if (auth.puedeEscribir()) {
+              <a class="boton boton--chico" [routerLink]="['/areas', area.id, 'editar']">Editar</a>
+            }
+            @if (auth.puedeEliminar()) {
+              <button type="button" class="boton boton--chico boton--peligro" (click)="porEliminar.set(area.id)">
+                Eliminar
+              </button>
+            }
+          </div>
+        }
+      </li>
+    }
+  </ul>
+}

@@ -1,0 +1,48 @@
+@use '../../../styles/tokens' as *;
+
+.riesgo-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
+  gap: $espacio-6;
+  align-items: start;
+}
+
+.riesgo-form__escala {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $espacio-4;
+}
+
+.riesgo-form__matriz {
+  display: grid;
+  gap: $espacio-2;
+
+  .campo__etiqueta {
+    font-weight: 600;
+  }
+
+  app-matriz-riesgo {
+    margin-top: $espacio-2;
+  }
+}
+
+.riesgo-form__resultado {
+  display: flex;
+  align-items: center;
+  gap: $espacio-3;
+  min-height: 2rem;
+  margin-top: $espacio-2;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+@include hasta-movil {
+  .riesgo-form {
+    grid-template-columns: 1fr;
+    gap: $espacio-5;
+  }
+
+  .riesgo-form__escala {
+    grid-template-columns: 1fr;
+  }
+}

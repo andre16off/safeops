@@ -1,0 +1,54 @@
+<a class="pagina__volver" routerLink="/areas">Volver a áreas</a>
+
+<header class="pagina__encabezado">
+  <h1>{{ esEdicion() ? 'Editar área' : 'Registrar área' }}</h1>
+</header>
+
+@if (error()) {
+  <p class="aviso aviso--error" role="alert">{{ error() }}</p>
+}
+
+@if (cargando()) {
+  <p role="status">Cargando área…</p>
+} @else {
+  <form class="formulario panel" style="max-width: 36rem" [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+    <div class="campo">
+      <label for="nombre">Nombre del área</label>
+      <input
+        id="nombre"
+        type="text"
+        formControlName="nombre"
+        maxlength="100"
+        [attr.aria-invalid]="!!errorDe('nombre', 'El nombre')"
+        aria-describedby="ayuda-nombre error-nombre"
+      />
+      <p class="campo__ayuda" id="ayuda-nombre">Por ejemplo: Almacén Central.</p>
+      @if (errorDe('nombre', 'El nombre'); as mensaje) {
+        <p class="campo__error" id="error-nombre">{{ mensaje }}</p>
+      }
+    </div>
+
+    <div class="campo">
+      <label for="ubicacion">Ubicación</label>
+      <input
+        id="ubicacion"
+        type="text"
+        formControlName="ubicacion"
+        maxlength="150"
+        [attr.aria-invalid]="!!errorDe('ubicacion', 'La ubicación')"
+        aria-describedby="ayuda-ubicacion error-ubicacion"
+      />
+      <p class="campo__ayuda" id="ayuda-ubicacion">Por ejemplo: Sede Lima.</p>
+      @if (errorDe('ubicacion', 'La ubicación'); as mensaje) {
+        <p class="campo__error" id="error-ubicacion">{{ mensaje }}</p>
+      }
+    </div>
+
+    <div class="formulario__acciones">
+      <button type="submit" class="boton boton--primario" [disabled]="enviando() || formulario.disabled">
+        {{ enviando() ? 'Guardando…' : esEdicion() ? 'Guardar cambios' : 'Registrar área' }}
+      </button>
+      <a class="boton" routerLink="/areas">Cancelar</a>
+    </div>
+  </form>
+}

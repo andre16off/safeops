@@ -1,0 +1,208 @@
+@use '../../../styles/tokens' as *;
+
+// ---------- Tarjetas por nivel ----------
+.niveles {
+  list-style: none;
+  margin: 0 0 $espacio-4;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: $espacio-4;
+}
+
+.nivel {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 0 $espacio-3;
+  padding: $espacio-4 $espacio-5;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-left: 10px solid var(--acero);
+  border-radius: 4px;
+  color: var(--tinta);
+  text-decoration: none;
+
+  &:hover .nivel__accion {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+.nivel--alto {
+  border-left-color: var(--alto);
+}
+
+.nivel--medio {
+  border-left-color: var(--medio);
+}
+
+.nivel--bajo {
+  border-left-color: var(--bajo);
+}
+
+.nivel__cantidad {
+  font-family: var(--fuente-titulos);
+  font-size: 3.25rem;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.nivel__nombre {
+  font-weight: 500;
+}
+
+.nivel__accion {
+  grid-column: 1 / -1;
+  margin-top: $espacio-2;
+  color: var(--acero);
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+// ---------- Paneles ----------
+.paneles {
+  display: grid;
+  grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
+  gap: $espacio-4;
+  margin-bottom: $espacio-4;
+  align-items: start;
+}
+
+.panel__ayuda {
+  color: var(--acero);
+  margin: $espacio-1 0 $espacio-4;
+}
+
+// ---------- Barras por área ----------
+.leyenda {
+  list-style: none;
+  margin: $espacio-2 0 $espacio-4;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: $espacio-2 $espacio-4;
+  color: var(--acero);
+  font-size: 0.9375rem;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: $espacio-2;
+  }
+}
+
+.leyenda__color {
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 2px;
+}
+
+.barras {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: $espacio-4;
+}
+
+.barra {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: $espacio-1 $espacio-3;
+  align-items: baseline;
+}
+
+.barra__nombre {
+  overflow-wrap: anywhere;
+}
+
+.barra__total {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.barra__pista {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 2px;
+  height: 0.875rem;
+  border-left: 1px solid var(--borde);
+}
+
+.segmento {
+  display: block;
+  height: 100%;
+
+  &:last-child {
+    border-radius: 0 4px 4px 0;
+  }
+}
+
+.segmento--alto {
+  background: var(--alto);
+}
+
+.segmento--medio {
+  background: var(--medio);
+}
+
+.segmento--bajo {
+  background: var(--bajo);
+}
+
+.barra__detalle {
+  grid-column: 1 / -1;
+  color: var(--acero);
+  font-size: 0.9375rem;
+}
+
+// ---------- Riesgos de nivel alto ----------
+.altos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1.5fr) auto auto;
+    gap: $espacio-2 $espacio-4;
+    align-items: center;
+    padding: $espacio-3 0;
+    border-top: 1px solid var(--borde);
+  }
+}
+
+.altos__area {
+  color: var(--acero);
+}
+
+.altos__producto {
+  font-variant-numeric: tabular-nums;
+}
+
+@include hasta-movil {
+  .niveles,
+  .paneles {
+    grid-template-columns: 1fr;
+  }
+
+  .nivel__cantidad {
+    font-size: 2.5rem;
+  }
+
+  .altos li {
+    grid-template-columns: 1fr auto;
+  }
+
+  .altos__area {
+    grid-row: 2;
+  }
+
+  .altos__producto {
+    grid-row: 2;
+    grid-column: 2;
+    display: none;
+  }
+}

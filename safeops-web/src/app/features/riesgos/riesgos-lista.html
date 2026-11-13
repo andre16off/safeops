@@ -1,0 +1,156 @@
+@if (areaId()) {
+  <a class="pagina__volver" routerLink="/areas">Volver a áreas</a>
+}
+
+<header class="pagina__encabezado">
+  <div>
+    @if (areaId()) {
+      <h1>Riesgos de {{ area()?.nombre ?? 'el área' }}</h1>
+      @if (area(); as a) {
+        <p class="pagina__descripcion">{{ a.ubicacion }}</p>
+      }
+    } @else {
+      <h1>Riesgos</h1>
+      <p class="pagina__descripcion">
+        Todos los riesgos registrados. Para registrar uno nuevo, entra al área donde se identificó.
+      </p>
+    }
+  </div>
+  @if (areaId() && area() && auth.puedeEscribir()) {
+    <a class="boton boton--primario" [routerLink]="['/areas', areaId(), 'riesgos', 'nuevo']">Registrar riesgo</a>
+  }
+</header>
+
+<div class="filtros">
+  <div class="campo filtros__busqueda">
+    <label for="filtro-busqueda">Buscar</label>
+    <input
+      id="filtro-busqueda"
+      type="search"
+      placeholder="Peligro, descripción o área"
+      [value]="busqueda()"
+      (input)="busqueda.set($any($event.target).value)"
+    />
+  </div>
+  <div class="campo">
+    <label for="filtro-nivel">Nivel</label>
+    <select id="filtro-nivel" (change)="cambiarNivel($any($event.target).value)">
+      <option value="" [selected]="nivel() === null">Todos</option>
+      @for (n of niveles; track n) {
+        <option [value]="n" [selected]="nivel() === n">{{ etiquetaNivel[n] }}</option>
+      }
+    </select>
+  </div>
+  <div class="campo">
+    <label for="filtro-impacto">Impacto mínimo</label>
+    <select id="filtro-impacto" (change)="cambiarImpacto($any($event.target).value)">
+      @for (i of impactos; track i) {
+        <option [value]="i" [selected]="impactoMinimo() === i">{{ i === 1 ? 'Cualquiera' : i + ' o más' }}</option>
+      }
+    </select>
+  </div>
+  <div class="campo solo-movil">
+    <label for="filtro-orden">Ordenar por</label>
+    <select id="filtro-orden" (change)="ordenarDesdeSelector($any($event.target).value)">
+      <option value="" [selected]="valorSelectorOrden() === ''">Orden de registro</option>
+      <option value="nivel:desc" [selected]="valorSelectorOrden() === 'nivel:desc'">Nivel, de alto a bajo</option>
+      <option value="nivel:asc" [selected]="valorSelectorOrden() === 'nivel:asc'">Nivel, de bajo a alto</option>
+      <option value="peligro:asc" [selected]="valorSelectorOrden() === 'peligro:asc'">Peligro, de la A a la Z</option>
+      <option value="impacto:desc" [selected]="valorSelectorOrden() === 'impacto:desc'">Impacto, de mayor a menor</option>
+    </select>
+  </div>
+  @if (filtrando()) {
+    <button type="button" class="boton" (click)="quitarFiltros()">Quitar filtros</button>
+  }
+</div>
+
+@if (error()) {
+  <p class="aviso aviso--error" role="alert">{{ error() }}</p>
+}
+
+@if (cargando()) {
+  <p role="status">Cargando riesgos…</p>
+} @else if (visibles().length === 0 && !error()) {
+  <div class="vacio">
+    @if (filtrando()) {
+      <strong>Ningún riesgo coincide con la búsqueda</strong>
+      Prueba con otro texto, otro nivel o un impacto mínimo menor.
+      <div><button type="button" class="boton" (click)="quitarFiltros()">Quitar filtros</button></div>
+    } @else if (areaId()) {
+      <strong>Esta área no tiene riesgos registrados</strong>
+      @if (auth.puedeEscribir()) {
+        Registra el primero indicando su probabilidad e impacto.
+        <div>
+          <a class="boton boton--primario" [routerLink]="['/areas', areaId(), 'riesgos', 'nuevo']">Registrar riesgo</a>
+        </div>
+      }
+    } @else {
+      <strong>Todavía no hay riesgos registrados</strong>
+      Entra a un área para registrar el primero.
+      <div><a class="boton" routerLink="/areas">Ir a áreas</a></div>
+    }
+  </div>
+} @else if (visibles().length > 0) {
+  <p class="conteo" role="status">
+    @if (visibles().length === total()) {
+      {{ total() }} {{ total() === 1 ? 'riesgo' : 'riesgos' }}
+    } @else {
+      {{ visibles().length }} de {{ total() }} riesgos
+    }
+  </p>
+
+  <table class="tabla">
+    <thead>
+      <tr>
+        @for (c of columnasVisibles(); track c.id) {
+          <th scope="col" [class.tabla__numero]="c.numero" [attr.aria-sort]="ariaOrden(c.id)">
+            <button type="button" class="tabla__orden" (click)="ordenarPor(c.id)">
+              {{ c.nombre }}<span aria-hidden="true">{{ flecha(c.id) }}</span>
+            </button>
+          </th>
+        }
+        <th scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (riesgo of visibles(); track riesgo.id) {
+        <tr>
+          <td data-etiqueta="Peligro">
+            <a class="enlace" [routerLink]="['/riesgos', riesgo.id]">{{ riesgo.peligro }}</a>
+          </td>
+          @if (!areaId()) {
+            <td data-etiqueta="Área">{{ riesgo.area.nombre }}</td>
+          }
+          <td data-etiqueta="Probabilidad" class="tabla__numero">{{ riesgo.probabilidad }}</td>
+          <td data-etiqueta="Impacto" class="tabla__numero">{{ riesgo.impacto }}</td>
+          <td data-etiqueta="Nivel"><app-nivel-insignia [nivel]="riesgo.nivel" /></td>
+          <td data-etiqueta="Acciones">
+            @if (porEliminar() === riesgo.id) {
+              <div class="confirmacion" role="group" [attr.aria-label]="'Confirmar eliminación de ' + riesgo.peligro">
+                <span>¿Eliminar?</span>
+                <button type="button" class="boton boton--chico boton--peligro" [disabled]="eliminando()" (click)="eliminar(riesgo)">
+                  {{ eliminando() ? 'Eliminando…' : 'Eliminar' }}
+                </button>
+                <button type="button" class="boton boton--chico" [disabled]="eliminando()" (click)="porEliminar.set(null)">
+                  Cancelar
+                </button>
+              </div>
+            } @else {
+              <div class="acciones">
+                <a class="boton boton--chico" [routerLink]="['/riesgos', riesgo.id]">Ver</a>
+                @if (auth.puedeEscribir()) {
+                  <a class="boton boton--chico" [routerLink]="['/riesgos', riesgo.id, 'editar']">Editar</a>
+                }
+                @if (auth.puedeEliminar()) {
+                  <button type="button" class="boton boton--chico boton--peligro" (click)="porEliminar.set(riesgo.id)">
+                    Eliminar
+                  </button>
+                }
+              </div>
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

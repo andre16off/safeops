@@ -1,0 +1,109 @@
+@use '../../styles/tokens' as *;
+
+:host {
+  display: block;
+}
+
+.matriz {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: $espacio-2;
+  align-items: center;
+  max-width: 22rem;
+}
+
+.matriz__eje {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--acero);
+}
+
+.matriz__eje--vertical {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  text-align: center;
+}
+
+.matriz__eje--horizontal {
+  grid-column: 2;
+  text-align: center;
+  padding-left: 1.5rem;
+}
+
+.matriz__cuadricula {
+  display: grid;
+  grid-template-columns: 1.5rem repeat(5, 1fr);
+  gap: 4px;
+}
+
+.matriz__numero {
+  display: grid;
+  place-items: center;
+  font-size: 0.8125rem;
+  color: var(--acero);
+  font-variant-numeric: tabular-nums;
+}
+
+.celda {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 3px;
+  padding: 0;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--tinta);
+}
+
+.celda--bajo {
+  background: var(--bajo-suave);
+}
+
+.celda--medio {
+  background: var(--medio-suave);
+}
+
+.celda--alto {
+  background: var(--alto-suave);
+}
+
+button.celda {
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: inset 0 0 0 2px var(--tinta);
+  }
+}
+
+.celda--seleccionada {
+  box-shadow: 0 0 0 2px var(--panel), 0 0 0 4px var(--tinta);
+  position: relative;
+  z-index: 1;
+}
+
+// Celda resaltada: la del riesgo elegido o las que tienen riesgos registrados.
+.celda--activa {
+  font-weight: 600;
+
+  &.celda--bajo {
+    background: var(--bajo);
+    color: var(--sobre-bajo);
+  }
+
+  &.celda--medio {
+    background: var(--medio);
+    color: var(--sobre-medio);
+  }
+
+  &.celda--alto {
+    background: var(--alto);
+    color: var(--sobre-alto);
+  }
+}
+
+button.celda--seleccionada:hover {
+  box-shadow: 0 0 0 2px var(--panel), 0 0 0 4px var(--tinta);
+}

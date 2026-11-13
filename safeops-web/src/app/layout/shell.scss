@@ -1,0 +1,121 @@
+@use '../../styles/tokens' as *;
+
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.saltar {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--amarillo);
+  color: var(--sobre-amarillo);
+  padding: $espacio-2 $espacio-3;
+  z-index: 10;
+
+  &:focus {
+    left: $espacio-2;
+    top: $espacio-2;
+  }
+}
+
+.cabecera {
+  background: var(--cabecera);
+  color: var(--sobre-cabecera);
+  // Franja de señalización de seguridad.
+  border-top: 6px solid var(--amarillo);
+  border-image: repeating-linear-gradient(-45deg, var(--amarillo) 0 12px, #1d2730 12px 24px) 6;
+}
+
+.cabecera__interior {
+  max-width: $ancho-maximo;
+  margin: 0 auto;
+  padding: $espacio-3 $espacio-4;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $espacio-3 $espacio-5;
+}
+
+.marca {
+  font-family: var(--fuente-titulos);
+  font-size: 1.625rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #fff;
+  text-decoration: none;
+}
+
+.navegacion {
+  display: flex;
+  gap: $espacio-1;
+
+  a {
+    color: #d5dbe0;
+    text-decoration: none;
+    font-weight: 500;
+    padding: $espacio-2 $espacio-3;
+    border-radius: 3px;
+    border-bottom: 3px solid transparent;
+
+    &:hover {
+      color: #fff;
+    }
+
+    &.activo {
+      color: #fff;
+      border-bottom-color: var(--amarillo);
+      border-radius: 3px 3px 0 0;
+    }
+  }
+}
+
+.cuenta {
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: $espacio-2 $espacio-3;
+}
+
+.cuenta__usuario {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.25;
+  font-weight: 500;
+}
+
+.cuenta__rol {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: #b4bec7;
+}
+
+.contenido {
+  max-width: $ancho-maximo;
+  margin: 0 auto;
+  padding: $espacio-5 $espacio-4 $espacio-7;
+}
+
+@include hasta-movil {
+  .cabecera__interior {
+    padding: $espacio-3;
+  }
+
+  .navegacion {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .cuenta__usuario {
+    display: none;
+  }
+
+  .contenido {
+    padding: $espacio-4 $espacio-3 $espacio-6;
+  }
+}

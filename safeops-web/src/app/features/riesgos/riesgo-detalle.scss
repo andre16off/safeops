@@ -1,0 +1,64 @@
+@use '../../../styles/tokens' as *;
+
+.detalle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
+  gap: $espacio-6;
+  align-items: start;
+  border-top: 8px solid var(--acero);
+
+  h1 {
+    overflow-wrap: anywhere;
+  }
+}
+
+.detalle--bajo {
+  border-top-color: var(--bajo);
+}
+
+.detalle--medio {
+  border-top-color: var(--medio);
+}
+
+.detalle--alto {
+  border-top-color: var(--alto);
+}
+
+.detalle__descripcion {
+  margin-top: $espacio-3;
+  max-width: 60ch;
+  font-size: 1.125rem;
+}
+
+.detalle__datos {
+  margin: $espacio-5 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: $espacio-4 $espacio-5;
+
+  dt {
+    color: var(--acero);
+    font-size: 0.9375rem;
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 500;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $espacio-3;
+    font-variant-numeric: tabular-nums;
+  }
+
+  div:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@include hasta-movil {
+  .detalle {
+    grid-template-columns: 1fr;
+    gap: $espacio-5;
+  }
+}

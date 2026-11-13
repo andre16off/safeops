@@ -1,0 +1,31 @@
+@use '../../../styles/tokens' as *;
+
+.areas {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  gap: $espacio-4;
+}
+
+.area {
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-top: 5px solid var(--tinta);
+  border-radius: 4px;
+  padding: $espacio-4 $espacio-5 $espacio-5;
+  display: flex;
+  flex-direction: column;
+  gap: $espacio-1;
+
+  h2 {
+    overflow-wrap: anywhere;
+  }
+}
+
+.area__ubicacion {
+  color: var(--acero);
+  margin-bottom: $espacio-4;
+  flex: 1;
+}

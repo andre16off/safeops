@@ -1,0 +1,36 @@
+<div class="matriz" role="group" aria-label="Matriz de riesgo: probabilidad por impacto">
+  <span class="matriz__eje matriz__eje--vertical" aria-hidden="true">Probabilidad</span>
+
+  <div class="matriz__cuadricula">
+    @for (p of filas; track p) {
+      <span class="matriz__numero" aria-hidden="true">{{ p }}</span>
+      @for (i of columnas; track i) {
+        @if (editable()) {
+          <button
+            type="button"
+            [class]="clase(p, i)"
+            [attr.aria-pressed]="seleccionada(p, i)"
+            [attr.aria-label]="descripcion(p, i)"
+            (click)="elegir.emit({ probabilidad: p, impacto: i })"
+          >
+            {{ texto(p, i) }}
+          </button>
+        } @else {
+          <span
+            [class]="clase(p, i)"
+            [attr.title]="conteos() ? descripcion(p, i) : null"
+            [attr.aria-label]="conteos() || seleccionada(p, i) ? descripcion(p, i) : null"
+          >
+            {{ texto(p, i) }}
+          </span>
+        }
+      }
+    }
+    <span></span>
+    @for (i of columnas; track i) {
+      <span class="matriz__numero" aria-hidden="true">{{ i }}</span>
+    }
+  </div>
+
+  <span class="matriz__eje matriz__eje--horizontal" aria-hidden="true">Impacto</span>
+</div>

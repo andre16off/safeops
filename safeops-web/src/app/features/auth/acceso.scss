@@ -1,0 +1,96 @@
+@use '../../../styles/tokens' as *;
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: var(--panel);
+}
+
+.acceso {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 4fr);
+}
+
+.acceso__formulario {
+  padding: $espacio-7 clamp(#{$espacio-4}, 8vw, 6rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 40rem;
+  width: 100%;
+  justify-self: end;
+
+  h1 {
+    font-size: 4rem;
+    letter-spacing: -0.01em;
+  }
+}
+
+.acceso__lema {
+  color: var(--acero);
+  font-size: 1.125rem;
+  max-width: 34ch;
+  margin: $espacio-2 0 $espacio-6;
+}
+
+.acceso__alterno {
+  margin-top: $espacio-5;
+  color: var(--acero);
+}
+
+.acceso__matriz {
+  background: var(--cabecera);
+  color: #d5dbe0;
+  // Franja de señalización de seguridad.
+  border-left: 10px solid var(--amarillo);
+  border-image: repeating-linear-gradient(-45deg, var(--amarillo) 0 14px, #1d2730 14px 28px) 10;
+  padding: $espacio-7 clamp(#{$espacio-4}, 5vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: $espacio-5;
+
+  app-matriz-riesgo {
+    background: var(--panel);
+    padding: $espacio-4;
+    border-radius: 4px;
+    max-width: 24rem;
+  }
+
+  p {
+    max-width: 38ch;
+  }
+
+  h2 {
+    color: #fff;
+  }
+}
+
+.acceso__tema {
+  position: absolute;
+  top: $espacio-4;
+  left: $espacio-4;
+}
+
+@include hasta-movil {
+  .acceso {
+    grid-template-columns: 1fr;
+  }
+
+  .acceso__formulario {
+    padding: $espacio-6 $espacio-4;
+    justify-self: stretch;
+
+    h1 {
+      font-size: 3rem;
+    }
+  }
+
+  .acceso__matriz {
+    border-left: 0;
+    border-top: 10px solid var(--amarillo);
+    border-image: repeating-linear-gradient(-45deg, var(--amarillo) 0 14px, #1d2730 14px 28px) 10;
+    padding: $espacio-6 $espacio-4;
+  }
+}

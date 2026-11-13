@@ -1,0 +1,23 @@
+// Medidas compartidas y utilidades SASS.
+$espacio-1: 0.25rem;
+$espacio-2: 0.5rem;
+$espacio-3: 0.75rem;
+$espacio-4: 1rem;
+$espacio-5: 1.5rem;
+$espacio-6: 2rem;
+$espacio-7: 3rem;
+
+$ancho-maximo: 70rem;
+$corte-movil: 44rem;
+
+@mixin hasta-movil {
+  @media (max-width: $corte-movil) {
+    @content;
+  }
+}
+
+@mixin desde-escritorio {
+  @media (min-width: ($corte-movil + 0.0625rem)) {
+    @content;
+  }
+}

@@ -1,0 +1,123 @@
+@use 'tokens' as *;
+
+:root {
+  // Paleta tomada de la señalización de seguridad industrial.
+  --concreto: #e9ecee;
+  --panel: #ffffff;
+  --tinta: #1d2730;
+  --acero: #51606d;
+  --borde: #c9d0d6;
+  --amarillo: #f5c400;
+
+  --bajo: #2e7d4f;
+  --bajo-suave: #cfe6d8;
+  --medio: #e9a100;
+  --medio-suave: #f8e3ad;
+  --alto: #c8322b;
+  --alto-suave: #f3c9c6;
+
+  // Colores que no cambian con el tema.
+  --cabecera: #1d2730;
+  --sobre-cabecera: #ffffff;
+  --sobre-amarillo: #1d2730;
+  --sobre-bajo: #ffffff;
+  --sobre-medio: #1d2730;
+  --sobre-alto: #ffffff;
+  --campo: #ffffff;
+  --aviso-error: #fbeceb;
+  --aviso-exito: #e7f3ec;
+  --aviso-info: #fdf6d8;
+  --sombra: 0 6px 20px rgba(29, 39, 48, 0.18);
+
+  --fuente-texto: 'Barlow', 'Segoe UI', system-ui, sans-serif;
+  --fuente-titulos: 'Barlow Condensed', 'Arial Narrow', 'Segoe UI', sans-serif;
+}
+
+:root[data-tema='oscuro'] {
+  --concreto: #11171c;
+  --panel: #1a222a;
+  --tinta: #e8edf1;
+  --acero: #a7b3be;
+  --borde: #34414d;
+
+  --bajo: #3f9f6c;
+  --bajo-suave: #1e3b2c;
+  --medio: #d99a00;
+  --medio-suave: #47380f;
+  --alto: #e0564d;
+  --alto-suave: #4f2422;
+
+  --cabecera: #0b1014;
+  --sobre-bajo: #0b1014;
+  --sobre-alto: #0b1014;
+  --campo: #11171c;
+  --aviso-error: #3a1d1b;
+  --aviso-exito: #17301f;
+  --aviso-info: #3a300f;
+  --sombra: 0 6px 20px rgba(0, 0, 0, 0.5);
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--concreto);
+  color: var(--tinta);
+  font-family: var(--fuente-texto);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--fuente-titulos);
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 1.625rem;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--tinta);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px var(--amarillo);
+}
+
+@include hasta-movil {
+  h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

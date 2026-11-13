@@ -1,0 +1,94 @@
+<header class="pagina__encabezado">
+  <div>
+    <h1>Panorama de riesgos</h1>
+    @if (!cargando() && !error()) {
+      <p class="pagina__descripcion">
+        {{ totalRiesgos() }} {{ totalRiesgos() === 1 ? 'riesgo registrado' : 'riesgos registrados' }} en
+        {{ totalAreas() }} {{ totalAreas() === 1 ? 'área' : 'áreas' }}.
+      </p>
+    }
+  </div>
+</header>
+
+@if (error()) {
+  <p class="aviso aviso--error" role="alert">{{ error() }}</p>
+}
+
+@if (cargando()) {
+  <p role="status">Cargando panorama…</p>
+} @else if (!error() && totalRiesgos() === 0) {
+  <div class="vacio">
+    <strong>Todavía no hay riesgos registrados</strong>
+    Entra a un área y registra el primero para ver aquí el resumen.
+    <div><a class="boton boton--primario" routerLink="/areas">Ir a áreas</a></div>
+  </div>
+} @else if (!error()) {
+  <ul class="niveles">
+    @for (n of niveles; track n) {
+      <li>
+        <a class="nivel" [class]="'nivel--' + n.toLowerCase()" routerLink="/riesgos" [queryParams]="{ filtroNivel: n }">
+          <span class="nivel__cantidad">{{ porNivel()[n] }}</span>
+          <span class="nivel__nombre">de nivel {{ etiquetaNivel[n].toLowerCase() }}</span>
+          <span class="nivel__accion">Ver riesgos</span>
+        </a>
+      </li>
+    }
+  </ul>
+
+  <div class="paneles">
+    <section class="panel" aria-labelledby="titulo-matriz">
+      <h2 id="titulo-matriz">Dónde se concentran</h2>
+      <p class="panel__ayuda">Cantidad de riesgos en cada combinación de probabilidad e impacto.</p>
+      <app-matriz-riesgo [conteos]="porCelda()" />
+    </section>
+
+    <section class="panel" aria-labelledby="titulo-areas">
+      <h2 id="titulo-areas">Riesgos por área</h2>
+      <ul class="leyenda" aria-label="Niveles">
+        @for (n of niveles; track n) {
+          <li><span class="leyenda__color" [class]="'segmento--' + n.toLowerCase()"></span>{{ etiquetaNivel[n] }}</li>
+        }
+      </ul>
+
+      <ul class="barras">
+        @for (a of porArea(); track a.area.id) {
+          <li class="barra">
+            <a class="enlace barra__nombre" [routerLink]="['/areas', a.area.id, 'riesgos']">{{ a.area.nombre }}</a>
+            <span class="barra__total">{{ a.total }}</span>
+            <div class="barra__pista" role="img" [attr.aria-label]="a.area.nombre + ': ' + detalle(a)">
+              @if (a.alto) {
+                <span class="segmento segmento--alto" [style.width]="ancho(a.alto)" [title]="'Alto: ' + a.alto"></span>
+              }
+              @if (a.medio) {
+                <span class="segmento segmento--medio" [style.width]="ancho(a.medio)" [title]="'Medio: ' + a.medio"></span>
+              }
+              @if (a.bajo) {
+                <span class="segmento segmento--bajo" [style.width]="ancho(a.bajo)" [title]="'Bajo: ' + a.bajo"></span>
+              }
+            </div>
+            <span class="barra__detalle">{{ detalle(a) }}</span>
+          </li>
+        }
+      </ul>
+    </section>
+  </div>
+
+  <section class="panel atencion" aria-labelledby="titulo-altos">
+    <h2 id="titulo-altos">Riesgos de nivel alto</h2>
+    @if (altos().length === 0) {
+      <p class="panel__ayuda">Ningún riesgo registrado alcanza el nivel alto.</p>
+    } @else {
+      <p class="panel__ayuda">Los de mayor producto de probabilidad por impacto, primero.</p>
+      <ul class="altos">
+        @for (r of altos(); track r.id) {
+          <li>
+            <a class="enlace" [routerLink]="['/riesgos', r.id]">{{ r.peligro }}</a>
+            <span class="altos__area">{{ r.area.nombre }}</span>
+            <span class="altos__producto">{{ r.probabilidad }} × {{ r.impacto }} = {{ r.probabilidad * r.impacto }}</span>
+            <app-nivel-insignia [nivel]="r.nivel" />
+          </li>
+        }
+      </ul>
+    }
+  </section>
+}

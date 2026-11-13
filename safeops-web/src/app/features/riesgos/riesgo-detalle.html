@@ -1,0 +1,65 @@
+@if (riesgo(); as r) {
+  <a class="pagina__volver" [routerLink]="['/areas', r.area.id, 'riesgos']">Volver a los riesgos de {{ r.area.nombre }}</a>
+} @else {
+  <a class="pagina__volver" routerLink="/riesgos">Volver a riesgos</a>
+}
+
+@if (error()) {
+  <p class="aviso aviso--error" role="alert">{{ error() }}</p>
+}
+
+@if (cargando()) {
+  <p role="status">Cargando riesgo…</p>
+} @else if (riesgo(); as r) {
+  <article class="detalle panel" [class]="'detalle--' + r.nivel.toLowerCase()">
+    <div class="detalle__texto">
+      <h1>{{ r.peligro }}</h1>
+      <p class="detalle__descripcion">{{ r.descripcion }}</p>
+
+      <dl class="detalle__datos">
+        <div>
+          <dt>Área</dt>
+          <dd>{{ r.area.nombre }}</dd>
+        </div>
+        <div>
+          <dt>Ubicación</dt>
+          <dd>{{ r.area.ubicacion }}</dd>
+        </div>
+        <div>
+          <dt>Probabilidad</dt>
+          <dd>{{ r.probabilidad }} de 5</dd>
+        </div>
+        <div>
+          <dt>Impacto</dt>
+          <dd>{{ r.impacto }} de 5</dd>
+        </div>
+        <div>
+          <dt>Nivel</dt>
+          <dd>
+            {{ r.probabilidad }} × {{ r.impacto }} = {{ r.probabilidad * r.impacto }}
+            <app-nivel-insignia [nivel]="r.nivel" />
+          </dd>
+        </div>
+      </dl>
+
+      @if (confirmando()) {
+        <div class="confirmacion" role="group" aria-label="Confirmar eliminación">
+          <span>¿Eliminar este riesgo?</span>
+          <button type="button" class="boton boton--peligro" [disabled]="eliminando()" (click)="eliminar(r)">
+            {{ eliminando() ? 'Eliminando…' : 'Eliminar' }}
+          </button>
+          <button type="button" class="boton" [disabled]="eliminando()" (click)="confirmando.set(false)">Cancelar</button>
+        </div>
+      } @else if (auth.puedeEscribir()) {
+        <div class="acciones">
+          <a class="boton boton--primario" [routerLink]="['/riesgos', r.id, 'editar']">Editar</a>
+          @if (auth.puedeEliminar()) {
+            <button type="button" class="boton boton--peligro" (click)="confirmando.set(true)">Eliminar</button>
+          }
+        </div>
+      }
+    </div>
+
+    <app-matriz-riesgo [probabilidad]="r.probabilidad" [impacto]="r.impacto" />
+  </article>
+}

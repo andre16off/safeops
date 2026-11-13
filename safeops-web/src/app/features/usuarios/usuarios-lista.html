@@ -1,0 +1,53 @@
+<header class="pagina__encabezado">
+  <div>
+    <h1>Usuarios</h1>
+    <p class="pagina__descripcion">
+      Cuentas con acceso al sistema. Las cuentas nuevas se crean desde la pantalla de registro con rol de usuario.
+    </p>
+  </div>
+</header>
+
+@if (error()) {
+  <p class="aviso aviso--error" role="alert">{{ error() }}</p>
+}
+
+@if (cargando()) {
+  <p role="status">Cargando usuarios…</p>
+} @else if (usuarios().length > 0) {
+  <table class="tabla">
+    <thead>
+      <tr>
+        <th scope="col">Usuario</th>
+        <th scope="col">Rol</th>
+        <th scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (usuario of usuarios(); track usuario.id) {
+        <tr>
+          <td data-etiqueta="Usuario">{{ usuario.nombreUsuario }}</td>
+          <td data-etiqueta="Rol"><span class="rol">{{ etiquetaRol[usuario.rol] }}</span></td>
+          <td data-etiqueta="Acciones">
+            @if (usuario.nombreUsuario === auth.usuario()) {
+              Tu cuenta
+            } @else if (porEliminar() === usuario.id) {
+              <div class="confirmacion" role="group" [attr.aria-label]="'Confirmar eliminación de ' + usuario.nombreUsuario">
+                <span>¿Eliminar esta cuenta?</span>
+                <button type="button" class="boton boton--chico boton--peligro" [disabled]="eliminando()" (click)="eliminar(usuario)">
+                  {{ eliminando() ? 'Eliminando…' : 'Eliminar' }}
+                </button>
+                <button type="button" class="boton boton--chico" [disabled]="eliminando()" (click)="porEliminar.set(null)">
+                  Cancelar
+                </button>
+              </div>
+            } @else {
+              <button type="button" class="boton boton--chico boton--peligro" (click)="porEliminar.set(usuario.id)">
+                Eliminar
+              </button>
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
