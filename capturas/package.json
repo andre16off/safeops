@@ -1,0 +1,12 @@
+{
+  "name": "safeops-capturas",
+  "private": true,
+  "type": "module",
+  "description": "Toma las capturas de pantalla del informe con SafeOps en ejecución.",
+  "scripts": {
+    "capturar": "node capturar.mjs"
+  },
+  "dependencies": {
+    "playwright-core": "^1.50.0"
+  }
+}

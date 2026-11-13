@@ -5,3 +5,6 @@
 # Sistema operativo
 Thumbs.db
 .DS_Store
+
+# Dependencias de la herramienta de capturas
+node_modules/
